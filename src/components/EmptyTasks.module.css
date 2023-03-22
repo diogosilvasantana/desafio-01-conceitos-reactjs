@@ -1,0 +1,16 @@
+.emptyContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 4rem 1.5rem;
+  border-top: solid 1px var(--gray-400);
+  border-radius: 8px;
+}
+
+.emptyContent img {
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-bottom: 1rem;
+}
