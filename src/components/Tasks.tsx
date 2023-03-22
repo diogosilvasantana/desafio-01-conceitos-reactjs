@@ -3,8 +3,18 @@ import styles from "./Tasks.module.css";
 import { PlusCircle } from "phosphor-react";
 import { EmptyTasks } from "./EmptyTasks";
 import { TaskItem } from "./TaskItem";
+import { useState } from "react";
 
 export function Tasks() {
+  const [tasks, setTasks] = useState([
+    { 
+      name: 'Terminar o desafio 01 de Conceitos de ReactJS do curso de Ignite da Rocketseat', 
+      completed: false
+    }
+  ])
+
+  function deleteTasks() {}
+
   return (
     <article>
       <form className={styles.taskForm}>
@@ -29,9 +39,19 @@ export function Tasks() {
           </div>
         </header>
 
-        <TaskItem />
-        <TaskItem />
-        <TaskItem />
+        <div className={styles.tasksItems}>
+          {tasks.map(task => {
+            return (
+              <TaskItem 
+                key={task.name}
+                completed={task.completed}
+                onDeleteTask={deleteTask}
+              />
+            )
+          })}
+        </div>
+
+
         <EmptyTasks />
       </div>
     </article>
