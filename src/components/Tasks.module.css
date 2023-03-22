@@ -34,6 +34,10 @@
   transition: background-color 0.1s;
 }
 
+.taskForm button[type=submit]:hover {
+  background: var(--blue-300);
+}
+
 .taskContent {
   width: 100%;
   margin-top: 3.375rem;

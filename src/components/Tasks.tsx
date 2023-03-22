@@ -24,11 +24,13 @@ export function Tasks() {
           </div>
 
           <div className={styles.taskCompletedCount}>
-            Concluidas
+            Concluídas
             <span>0</span>
           </div>
         </header>
 
+        <TaskItem />
+        <TaskItem />
         <TaskItem />
         <EmptyTasks />
       </div>
