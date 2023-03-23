@@ -1,19 +1,45 @@
 import styles from "./TaskItem.module.css";
 import { Trash } from "phosphor-react";
+import { useState } from "react";
 
-export function TaskItem() {
+interface Task {
+  id: string;
+  name: string;
+  completed: boolean;
+}
+interface TaskProps {
+  content: Task;
+  onDeleteTask: (task: Task) => void;
+}
+
+export function TaskItem({ content, onDeleteTask }: TaskProps) {
+  const [isChecked, setIsChecked] = useState(false);
+
+  function handleCheckInput() {
+    setIsChecked((state) => !state);
+  }
+
+  function handleDeleteTask() {
+    onDeleteTask(content);
+  }
+
   return (
     <div className={styles.task}>
-      
-      <input type="checkbox" id="checkboxId" />
-      <label htmlFor="checkboxId" />
+      <div className={styles.taskContainer}>
+        <input
+          type="checkbox"
+          id={content.id}
+          defaultChecked={content.completed}
+          onClick={handleCheckInput}
+        />
+        <label htmlFor={content.id} />
 
-      <p>
-        Integer urna interdum massa libero auctor neque turpis turpis semper.
-        Duis vel sed fames integer.
-      </p>
+        <p className={isChecked ? styles.taskIsCompleted : ""}>
+          {content.name}
+        </p>
+      </div>
 
-      <button>
+      <button onMouseDown={handleDeleteTask} title="Deletar tarefa">
         <Trash />
       </button>
     </div>

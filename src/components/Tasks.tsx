@@ -1,24 +1,58 @@
 import styles from "./Tasks.module.css";
+import { v4 as uuidv4 } from 'uuid';
 
 import { PlusCircle } from "phosphor-react";
 import { EmptyTasks } from "./EmptyTasks";
 import { TaskItem } from "./TaskItem";
-import { useState } from "react";
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
 
 export function Tasks() {
   const [tasks, setTasks] = useState([
-    { 
-      name: 'Terminar o desafio 01 de Conceitos de ReactJS do curso de Ignite da Rocketseat', 
-      completed: false
-    }
-  ])
+    {
+      id: uuidv4(),
+      name: "Terminar o desafio 01 de Conceitos de ReactJS do curso de Ignite da Rocketseat",
+      completed: true,
+    },
+  ]);
 
-  function deleteTasks() {}
+  const [newTask, setNewTask] = useState("");
+
+  function handleCreateNewTask(event: FormEvent) {
+    event.preventDefault();
+
+    setTasks([...tasks, { id: uuidv4(), name: newTask, completed: false }]);
+    setNewTask("");
+  }
+
+  function handleNewTaskChange(event: ChangeEvent<HTMLInputElement>) {
+    event.target.setCustomValidity("");
+    setNewTask(event.target.value);
+  }
+
+  function handleNewTaskInvalid(event: InvalidEvent<HTMLInputElement>) {
+    event.target.setCustomValidity("Esse campo é obrigatório!");
+  }
+
+  function deleteTasks(taskToDelete: any) {
+    const taskWithoutDeleteOne = tasks.filter((task) => {
+      return task !== taskToDelete;
+    });
+
+    setTasks(taskWithoutDeleteOne);
+  }
 
   return (
     <article>
-      <form className={styles.taskForm}>
-        <input type="text" placeholder="Adicione uma nova tarefa" />
+      <form onSubmit={handleCreateNewTask} className={styles.taskForm}>
+        <input
+          name="taskInput"
+          type="text"
+          value={newTask}
+          placeholder="Adicione uma nova tarefa"
+          onChange={handleNewTaskChange}
+          onInvalid={handleNewTaskInvalid}
+          required
+        />
 
         <button type="submit">
           Criar
@@ -30,7 +64,7 @@ export function Tasks() {
         <header>
           <div className={styles.taskCreatedCount}>
             Tarefas Criadas
-            <span>0</span>
+            <span>{tasks.length}</span>
           </div>
 
           <div className={styles.taskCompletedCount}>
@@ -40,19 +74,20 @@ export function Tasks() {
         </header>
 
         <div className={styles.tasksItems}>
-          {tasks.map(task => {
-            return (
-              <TaskItem 
-                key={task.name}
-                completed={task.completed}
-                onDeleteTask={deleteTask}
-              />
-            )
-          })}
+          {tasks.length > 0 ? (
+            tasks.map((task) => {
+              return (
+                <TaskItem
+                  key={task.name}
+                  content={task}
+                  onDeleteTask={deleteTasks}
+                />
+              );
+            })
+          ) : (
+            <EmptyTasks />
+          )}
         </div>
-
-
-        <EmptyTasks />
       </div>
     </article>
   );
