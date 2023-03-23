@@ -2,21 +2,15 @@ import styles from "./TaskItem.module.css";
 import { Trash } from "phosphor-react";
 import { useState } from "react";
 
-interface Task {
-  id: string;
-  name: string;
-  completed: boolean;
-}
-interface TaskProps {
-  content: Task;
-  onDeleteTask: (task: Task) => void;
-}
+import { TaskProps } from "../../interface/Task.interface";
 
-export function TaskItem({ content, onDeleteTask }: TaskProps) {
+export function TaskItem({ content, onDeleteTask, onCountTaskCompleted }: TaskProps) {
   const [isChecked, setIsChecked] = useState(false);
 
   function handleCheckInput() {
+    content.completed = !content.completed;
     setIsChecked((state) => !state);
+    onCountTaskCompleted(content);
   }
 
   function handleDeleteTask() {

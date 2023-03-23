@@ -1,6 +1,6 @@
 import styles from "./EmptyTasks.module.css";
 
-import taskIcon from "../assets/task-icon.svg";
+import taskIcon from "../../assets/task-icon.svg";
 
 export function EmptyTasks() {
   return (

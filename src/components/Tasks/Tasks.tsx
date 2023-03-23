@@ -2,20 +2,17 @@ import styles from "./Tasks.module.css";
 import { v4 as uuidv4 } from 'uuid';
 
 import { PlusCircle } from "phosphor-react";
-import { EmptyTasks } from "./EmptyTasks";
-import { TaskItem } from "./TaskItem";
+import { EmptyTasks } from "../EmptyTasks/EmptyTasks";
+import { TaskItem } from "../TaskItem/TaskItem";
 import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
+import { Task } from "../../interface/Task.interface";
 
 export function Tasks() {
-  const [tasks, setTasks] = useState([
-    {
-      id: uuidv4(),
-      name: "Terminar o desafio 01 de Conceitos de ReactJS do curso de Ignite da Rocketseat",
-      completed: true,
-    },
-  ]);
-
+  const [tasks, setTasks] = useState<Task[]>([]);
+  
   const [newTask, setNewTask] = useState("");
+
+  const [countTaskCompleted, setCountTaskCompleted] = useState(0);
 
   function handleCreateNewTask(event: FormEvent) {
     event.preventDefault();
@@ -33,12 +30,22 @@ export function Tasks() {
     event.target.setCustomValidity("Esse campo é obrigatório!");
   }
 
-  function deleteTasks(taskToDelete: any) {
+  function countTotalTaskComplete(task: Task) {
+    setCountTaskCompleted((state) => {
+      return task.completed ? state + 1 : state - 1;
+    })
+  };
+
+  function deleteTasks(taskToDelete: Task) {
     const taskWithoutDeleteOne = tasks.filter((task) => {
       return task !== taskToDelete;
     });
 
     setTasks(taskWithoutDeleteOne);
+
+    setCountTaskCompleted((state) => {
+      return state > 0 ? state - 1 : state;
+    })
   }
 
   return (
@@ -69,7 +76,7 @@ export function Tasks() {
 
           <div className={styles.taskCompletedCount}>
             Concluídas
-            <span>0</span>
+            <span>{countTaskCompleted}</span>
           </div>
         </header>
 
@@ -81,6 +88,7 @@ export function Tasks() {
                   key={task.name}
                   content={task}
                   onDeleteTask={deleteTasks}
+                  onCountTaskCompleted={countTotalTaskComplete}
                 />
               );
             })
